@@ -18,8 +18,8 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./backend/Dockerfile   # Points to your existing Dockerfile location
-      target: development               # Changed from 'dev' to match your Stage 3 name
+      dockerfile: ./backend/Dockerfile
+      target: development
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: todo_user
@@ -42,7 +42,7 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-      target: frontend-builder
+      target: frontend-dev
     ports:
       - "5173:5173"
     develop:

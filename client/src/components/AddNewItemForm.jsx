@@ -18,7 +18,7 @@ export function AddItemForm({ onNewItem }) {
             headers: { 'Content-Type': 'application/json' },
         };
 
-        fetch('/api/items', options)
+        fetch('http://localhost:3000/api/items', options)
             .then((r) => r.json())
             .then((item) => {
                 onNewItem(item);

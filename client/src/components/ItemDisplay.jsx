@@ -11,7 +11,7 @@ import './ItemDisplay.scss';
 
 export function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
     const toggleCompletion = () => {
-        fetch(`/api/items/${item.id}`, {
+        fetch(`http://localhost:3000/api/items/${item.id}`, {
             method: 'PUT',
             body: JSON.stringify({
                 name: item.name,
@@ -24,7 +24,7 @@ export function ItemDisplay({ item, onItemUpdate, onItemRemoval }) {
     };
 
     const removeItem = () => {
-        fetch(`/api/items/${item.id}`, { method: 'DELETE' }).then(() =>
+        fetch(`http://localhost:3000/api/items/${item.id}`, { method: 'DELETE' }).then(() =>
             onItemRemoval(item),
         );
     };

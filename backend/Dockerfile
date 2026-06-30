@@ -6,6 +6,15 @@ RUN npm install
 COPY ./client/ .
 RUN npm run build
 
+# Frontend Active Development Server
+FROM node:22-alpine AS frontend-dev
+WORKDIR /client
+COPY ./client/package*.json ./
+RUN npm install
+COPY ./client/ .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host"]
+
 # Main Application Base
 FROM node:22-alpine AS base
 WORKDIR /app
