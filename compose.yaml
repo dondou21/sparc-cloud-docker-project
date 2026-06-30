@@ -1,0 +1,57 @@
+services:
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_pass
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile   # Points to your existing Dockerfile location
+      target: development               # Changed from 'dev' to match your Stage 3 name
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todo_pass
+      MYSQL_DB: todos
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    develop:
+      watch:
+        - action: sync          
+          path: ./backend
+          target: /app
+        - action: rebuild       
+          path: ./backend/package.json
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+      target: frontend-builder
+    ports:
+      - "5173:5173"
+    develop:
+      watch:
+        - action: sync          
+          path: ./client
+          target: /client
+        - action: rebuild       
+          path: ./client/package.json
+
+volumes:
+  mysql-data:
